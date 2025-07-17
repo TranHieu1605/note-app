@@ -247,10 +247,10 @@ packages:
     dependency: "direct dev"
     description:
       name: flutter_launcher_icons
-      sha256: bfa04787c85d80ecb3f8777bde5fc10c3de809240c48fa061a2c2bf15ea5211c
+      sha256: "10f13781741a2e3972126fae08393d3c4e01fa4cd7473326b94b72cf594195e7"
       url: "https://pub.dev"
     source: hosted
-    version: "0.14.3"
+    version: "0.14.4"
   flutter_local_notifications:
     dependency: "direct main"
     description:
@@ -390,10 +390,10 @@ packages:
     dependency: transitive
     description:
       name: get_time_ago
-      sha256: "1c6ccc877e480eee559987411ec5242cecc088d45fc821f0d8aec98bbf4f210e"
+      sha256: cd111914562ca2b938afbc73f715fab1f37795cc053924d08f6de59878781388
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.1"
+    version: "2.3.2"
   glob:
     dependency: transitive
     description:
@@ -534,18 +534,18 @@ packages:
     dependency: "direct main"
     description:
       name: nylo_framework
-      sha256: "4f89e6940aef1e5eeb1c281c47babb7c7fa628d2cb14b402bb1c680be9d7bd59"
+      sha256: e38a8e26870671c12dfd9ad7844baa9214ae7aa5796862602037193b3b1cdac3
       url: "https://pub.dev"
     source: hosted
-    version: "6.8.10"
+    version: "6.8.13"
   nylo_support:
     dependency: transitive
     description:
       name: nylo_support
-      sha256: d1d81869fcfd04ed296d49003f349a1494d1a7cab74bab0e48928391df0da227
+      sha256: "663e32f21e9b8e0bd55dedf30ae86fc61aabbba2ad2290c58140ffe35162c4be"
       url: "https://pub.dev"
     source: hosted
-    version: "6.31.0"
+    version: "6.34.0"
   package_config:
     dependency: transitive
     description:
@@ -694,10 +694,10 @@ packages:
     dependency: "direct main"
     description:
       name: scaffold_ui
-      sha256: "2c2d41e7355536f215e84d70772ae6b1f86a4d7e1e0b4b29cbb46c91113b982e"
+      sha256: e8f0c4ff49125f5a2c22b1809da24a04e3ded2cd6e53984f1e539ae0da734127
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.8"
+    version: "1.2.9"
   shared_preferences:
     dependency: transitive
     description:
@@ -758,10 +758,10 @@ packages:
     dependency: transitive
     description:
       name: skeletonizer
-      sha256: a9ddf63900947f4c0648372b6e9987bc2b028db9db843376db6767224d166c31
+      sha256: eebc03dc86b298e2d7f61e0ebce5713e9dbbc3e786f825909b4591756f196eb6
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.1"
+    version: "2.1.0+1"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -851,10 +851,10 @@ packages:
     dependency: "direct main"
     description:
       name: url_launcher
-      sha256: "9d06212b1362abc2f0f0d78e6f09f726608c74e3b9462e8368bb03314aa8d603"
+      sha256: f6a7e5c4835bb4e3026a04793a4199ca2d14c739ec378fdfe23fc8075d0439f8
       url: "https://pub.dev"
     source: hosted
-    version: "6.3.1"
+    version: "6.3.2"
   url_launcher_android:
     dependency: transitive
     description:
