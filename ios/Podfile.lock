@@ -1,8 +1,6 @@
 PODS:
   - app_badge_plus (1.2.3):
     - Flutter
-  - device_info_plus (0.0.1):
-    - Flutter
   - Flutter (1.0.0)
   - flutter_local_notifications (0.0.1):
     - Flutter
@@ -21,7 +19,6 @@ PODS:
 
 DEPENDENCIES:
   - app_badge_plus (from `.symlinks/plugins/app_badge_plus/ios`)
-  - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - Flutter (from `Flutter`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
@@ -33,8 +30,6 @@ DEPENDENCIES:
 EXTERNAL SOURCES:
   app_badge_plus:
     :path: ".symlinks/plugins/app_badge_plus/ios"
-  device_info_plus:
-    :path: ".symlinks/plugins/device_info_plus/ios"
   Flutter:
     :path: Flutter
   flutter_local_notifications:
@@ -52,8 +47,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   app_badge_plus: 73079d53b6a318c723de4d8aded465fbc4e92897
-  device_info_plus: bf2e3232933866d73fe290f2942f2156cdd10342
-  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_local_notifications: ff50f8405aaa0ccdc7dcfb9022ca192e8ad9688f
   flutter_secure_storage: d33dac7ae2ea08509be337e775f6b59f1ff45f12
   flutter_timezone: ac3da59ac941ff1c98a2e1f0293420e020120282
@@ -61,6 +55,6 @@ SPEC CHECKSUMS:
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
 
-PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
+PODFILE CHECKSUM: 4f1c12611da7338d21589c0b2ecd6bd20b109694
 
 COCOAPODS: 1.16.2

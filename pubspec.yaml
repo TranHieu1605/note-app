@@ -16,15 +16,15 @@ environment:
   flutter: ">=3.24.0 <4.0.0"
 dependencies:
   url_launcher: ^6.3.2
-  google_fonts: ^6.2.1
-  analyzer: ^6.7.0
+  google_fonts: ^6.3.0
+  analyzer: ^8.1.1
   intl: ^0.20.2
-  nylo_framework: ^6.8.13
+  nylo_framework: ^6.8.15
   pretty_dio_logger: ^1.4.0
   cupertino_icons: ^1.0.8
   path_provider: ^2.1.4
-  flutter_local_notifications: ^19.3.0
-  font_awesome_flutter: ^10.8.0
+  flutter_local_notifications: ^19.4.0
+  font_awesome_flutter: ^10.9.0
   scaffold_ui: ^1.2.9
   flutter:
     sdk: flutter
