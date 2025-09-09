@@ -144,7 +144,6 @@ class _HomePageState extends NyPage<HomePage> {
           final note = data[index];
           return _NoteCard(
             note: note,
-            // [THÊM 5.3] Truyền text thời gian xuống Card để hiển thị
             timeText: _timeLabel(note),
             onTap: () => _openEdit(note, index),
           );
