@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/app/models/note.dart';
 
 class WriteNotePage extends StatefulWidget {
-  // [SỬA 4.3] Nếu truyền note + index => chế độ CHỈNH SỬA, ngược lại => TẠO MỚI
-  final Note? note; // note đang sửa (nếu có)
-  final int? index; // vị trí trong danh sách (nếu có)
+
+  final Note? note;
+  final int? index;
 
   const WriteNotePage({super.key, this.note, this.index});
 
@@ -16,12 +16,12 @@ class _WriteNotePageState extends State<WriteNotePage> {
   final TextEditingController _titleCtrl = TextEditingController();
   final TextEditingController _contentCtrl = TextEditingController();
 
-  bool get isEditing => widget.note != null; // đang ở chế độ sửa?
+  bool get isEditing => widget.note != null;
 
   @override
   void initState() {
     super.initState();
-    // [SỬA 4.3] Nếu sửa → đổ sẵn dữ liệu vào ô nhập
+
     if (isEditing) {
       _titleCtrl.text = widget.note!.title;
       _contentCtrl.text = widget.note!.content;
@@ -35,7 +35,7 @@ class _WriteNotePageState extends State<WriteNotePage> {
     super.dispose();
   }
 
-  // [SỬA 4.3] Hàm tạo/cập nhật Note, trả kết quả về Home
+
   void _save({bool isAuto = false}) {
     final title = _titleCtrl.text.trim();
     final content = _contentCtrl.text.trim();
@@ -43,7 +43,7 @@ class _WriteNotePageState extends State<WriteNotePage> {
     // title BẮT BUỘC + tối đa 120 ký tự
     if (title.isEmpty || title.length > 120) {
       if (!isAuto) {
-        // chỉ báo lỗi khi người dùng bấm Lưu; auto-back thì im lặng
+
         showDialog(
           context: context,
           builder: (_) => AlertDialog(
@@ -66,14 +66,14 @@ class _WriteNotePageState extends State<WriteNotePage> {
         id: widget.note!.id,
         title: title,
         content: content,
-        createdAt: widget.note!.createdAt, // giữ nguyên createdAt
-        updatedAt: now, // cập nhật thời gian sửa
+        createdAt: widget.note!.createdAt,
+        updatedAt: now,
       );
       Navigator.pop(context, {'action': 'update', 'note': updated, 'index': widget.index});
     } else {
       // tạo mới note
       final created = Note(
-        id: now.millisecondsSinceEpoch.toString(), // id tạm: timestamp
+        id: now.millisecondsSinceEpoch.toString(),
         title: title,
         content: content,
         createdAt: now,
@@ -83,7 +83,7 @@ class _WriteNotePageState extends State<WriteNotePage> {
     }
   }
 
-  // [SỬA 4.3] Xóa (chỉ có khi sửa)
+  //  Xóa
   void _delete() async {
     final yes = await showDialog<bool>(
       context: context,
@@ -103,10 +103,10 @@ class _WriteNotePageState extends State<WriteNotePage> {
 
   @override
   Widget build(BuildContext context) {
-    //  Tự động LƯU khi người dùng back (nếu title hợp lệ)
+    //  Tự động LƯU
     return WillPopScope(
       onWillPop: () async {
-        _save(isAuto: true); // tự lưu (im lặng) nếu hợp lệ
+        _save(isAuto: true); // tự lưu nếu hợp lệ
         return true; // cho phép thoát trang
       },
       child: Scaffold(
@@ -128,7 +128,7 @@ class _WriteNotePageState extends State<WriteNotePage> {
             children: [
               TextField(
                 controller: _titleCtrl,
-                maxLength: 120, //  giới hạn 120 ký tự
+                maxLength: 120,
                 decoration: const InputDecoration(
                   labelText: 'Tiêu đề (bat buoc, toi da 120)',
                   border: OutlineInputBorder(),
@@ -151,7 +151,7 @@ class _WriteNotePageState extends State<WriteNotePage> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: _save, // Lưu → kiểm tra → trả kết quả
+                  onPressed: _save,
                   child: const Text('Lưu'),
                 ),
               ),

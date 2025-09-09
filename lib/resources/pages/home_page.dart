@@ -10,7 +10,7 @@ class HomePage extends NyStatefulWidget<HomeController> {
 }
 
 class _HomePageState extends NyPage<HomePage> {
-  // [THÊM 5.0] Thêm thời gian cho 3 note mẫu để nhìn thấy ngay trên UI
+
   final List<Note> _notes = [
     Note(
       title: 'Đi xem A80',
@@ -42,7 +42,7 @@ class _HomePageState extends NyPage<HomePage> {
     super.dispose();
   }
 
-  //  Hàm format thời gian
+
   String _fmt(DateTime? dt) {
     if (dt == null) return '';
     String two(int n) => n < 10 ? '0$n' : '$n';
@@ -158,7 +158,7 @@ class _HomePageState extends NyPage<HomePage> {
       separatorBuilder: (_, __) => const Divider(height: 1),
       itemBuilder: (context, index) {
         final note = data[index];
-        // subtitle đổi thành 2 dòng: (1) nội dung, (2) thời gian
+
         return ListTile(
           title: Text(note.title),
           subtitle: Column(
@@ -197,7 +197,6 @@ class _HomePageState extends NyPage<HomePage> {
   }
 }
 
-//  Card dùng cho Grid + thêm dòng thời gian ở chân thẻ
 class _NoteCard extends StatelessWidget {
   final Note note;
   final String timeText;
