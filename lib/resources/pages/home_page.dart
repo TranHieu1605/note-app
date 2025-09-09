@@ -1,173 +1,245 @@
-import '/resources/widgets/theme_toggle_widget.dart';
-import '/app/networking/api_service.dart';
-import '/bootstrap/extensions.dart';
-import '/resources/widgets/logo_widget.dart';
-import '/resources/widgets/safearea_widget.dart';
-import '/app/controllers/home_controller.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:nylo_framework/nylo_framework.dart';
+import 'package:flutter_app/app/controllers/home_controller.dart';
+import 'package:flutter_app/app/models/note.dart';
+import 'package:flutter_app/resources/pages/write_note_page.dart';
 
 class HomePage extends NyStatefulWidget<HomeController> {
   static RouteView path = ("/home", (_) => HomePage());
-
   HomePage({super.key}) : super(child: () => _HomePageState());
 }
 
 class _HomePageState extends NyPage<HomePage> {
-  int? _stars;
+  // [THÊM 5.0] Thêm thời gian cho 3 note mẫu để nhìn thấy ngay trên UI
+  final List<Note> _notes = [
+    Note(
+      title: 'Đi xem A80',
+      content: 'Mac áo cờ đỏ sao vang',
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    ),
+    Note(
+      title: 'Học tieng anh',
+      content: 'Thi ielts',
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    ),
+    Note(
+      title: 'Tán gái',
+      content: 'Phong bat',
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    ),
+  ];
+
+  final TextEditingController _searchController = TextEditingController();
+  String _query = '';
+  bool _isGrid = false;
 
   @override
-  get init => () async {
-        /// Uncomment the code below to fetch the number of stars for the Nylo repository
-        // Map<String, dynamic>? githubResponse = await api<ApiService>(
-        //         (request) => request.githubInfo(),
-        // );
-        // _stars = githubResponse?["stargazers_count"];
-      };
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
-  /// Define the Loading style for the page.
-  /// Options: LoadingStyle.normal(), LoadingStyle.skeletonizer(), LoadingStyle.none()
-  /// uncomment the code below.
-  @override
-  LoadingStyle get loadingStyle => LoadingStyle.normal();
+  //  Hàm format thời gian
+  String _fmt(DateTime? dt) {
+    if (dt == null) return '';
+    String two(int n) => n < 10 ? '0$n' : '$n';
+    final d = two(dt.day), m = two(dt.month), h = two(dt.hour), mm = two(dt.minute);
+    return '$d/$m $h:$mm';
+  }
 
-  /// The [view] method displays your page.
+  // hien thi cap nhat neu thoi gian co thay doi, k thi da tao
+  String _timeLabel(Note n) {
+    if (n.updatedAt != null && n.createdAt != null && n.updatedAt!.isAfter(n.createdAt!)) {
+      return 'Cập nhật: ${_fmt(n.updatedAt)}';
+    }
+    return 'Đã tạo: ${_fmt(n.createdAt)}';
+  }
+
   @override
-  Widget view(BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          showToastSuccess(title: "Hello 👋", description: "Welcome to Nylo");
-
-          // Uncomment the code below to send a push notifications
-          // await PushNotification.sendNotification(
-          //     title: "Hello 👋", body: "Welcome to Nylo",
-          // );
-        },
-        child: const Icon(Icons.notifications),
-      ),
-      body: SafeAreaWidget(
-          child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Logo(),
-          Text(
-            getEnv("APP_NAME"),
-          ).displayMedium(color: context.color.content),
-          const Text("Micro-framework for Flutter", textAlign: TextAlign.center)
-              .titleMedium(color: context.color.primaryAccent),
-          const Text("Build something amazing 💡", textAlign: TextAlign.center)
-              .bodyMedium()
-              .alignCenter(),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              const Divider(),
-              Container(
-                height: 250,
-                width: double.infinity,
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                decoration: BoxDecoration(
-                    color: context.color.surfaceBackground,
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withAlpha((255.0 * 0.1).round()),
-                        spreadRadius: 1,
-                        blurRadius: 9,
-                        offset: const Offset(0, 3),
-                      ),
-                    ]),
-                child: Center(
-                  child: ListView(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    children: ListTile.divideTiles(context: context, tiles: [
-                      if (Nylo.containsRoute("/landing"))
-                        ListTile(
-                          leading: FaIcon(FontAwesomeIcons.rocket),
-                          title: Text(
-                            "Start building",
-                          ).bodyLarge(color: context.color.surfaceContent),
-                          subtitle: Text(
-                            "Your project is ready",
-                          ).bodySmall(color: context.color.surfaceContent),
-                          trailing: const Icon(Icons.chevron_right),
-                          onTap: () => routeTo("/landing"),
-                        ),
-                      ListTile(
-                        leading: FaIcon(FontAwesomeIcons.readme),
-                        title: Text(
-                          "Documentation",
-                        ).bodyLarge(color: context.color.surfaceContent),
-                        subtitle: Text(
-                          "Master the framework",
-                        ).bodySmall(color: context.color.surfaceContent),
-                        trailing: const Icon(Icons.chevron_right),
-                        onTap: widget.controller.onTapDocumentation,
-                      ),
-                      ListTile(
-                        leading: FaIcon(FontAwesomeIcons.github),
-                        title: Text(
-                          "Github",
-                        ).bodyLarge(color: context.color.surfaceContent),
-                        subtitle: Text(
-                          _stars == null ? "Source code" : "$_stars Stars",
-                        ).bodySmall(color: context.color.surfaceContent),
-                        trailing: const Icon(Icons.chevron_right),
-                        onTap: widget.controller.onTapGithub,
-                      ),
-                      ListTile(
-                        leading: FaIcon(FontAwesomeIcons.newspaper),
-                        title: Text(
-                          "Updates",
-                        ).bodyLarge(color: context.color.surfaceContent),
-                        subtitle: Text(
-                          "View the changelog",
-                        ).bodySmall(color: context.color.surfaceContent),
-                        trailing: const Icon(Icons.chevron_right),
-                        onTap: widget.controller.onTapChangeLog,
-                      ),
-                      ListTile(
-                        leading: FaIcon(FontAwesomeIcons.youtube),
-                        title: Text(
-                          "YouTube Channel",
-                        ).bodyLarge(color: context.color.surfaceContent),
-                        subtitle: Text(
-                          "Tutorial videos",
-                        ).bodySmall(color: context.color.surfaceContent),
-                        trailing: const Icon(Icons.chevron_right),
-                        onTap: widget.controller.onTapYouTube,
-                      ),
-                      ListTile(
-                        leading: FaIcon(FontAwesomeIcons.xTwitter),
-                        title: Text(
-                          "Follow us on X",
-                        ).bodyLarge(color: context.color.surfaceContent),
-                        subtitle: Text(
-                          "Stay updated",
-                        ).bodySmall(color: context.color.surfaceContent),
-                        trailing: const Icon(Icons.chevron_right),
-                        onTap: widget.controller.onTapX,
-                      ),
-                    ]).toList(),
-                  ),
-                ),
-              ),
-              const Text(
-                "Framework Version: $nyloVersion",
-              ).bodyMedium().setColor(context, (color) => Colors.grey),
-              ThemeToggle(),
-            ],
+      appBar: AppBar(
+        title: const Text('Ghi chú'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(_isGrid ? Icons.list : Icons.grid_view),
+            onPressed: () => setState(() => _isGrid = !_isGrid),
           ),
         ],
-      )),
+      ),
+      body: _buildBody(),
+
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const WriteNotePage()),
+          );
+          if (result is Map && result['action'] == 'create' && result['note'] is Note) {
+            setState(() => _notes.insert(0, result['note'] as Note));
+          }
+        },
+        child: const Icon(Icons.add),
+        tooltip: 'Tạo ghi chú mới',
+      ),
+    );
+  }
+
+  Widget _buildBody() {
+    final q = _query.trim().toLowerCase();
+    final data = q.isEmpty
+        ? _notes
+        : _notes.where((n) {
+      final t = n.title.toLowerCase();
+      final c = n.content.toLowerCase();
+      return t.contains(q) || c.contains(q);
+    }).toList();
+
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(12),
+          child: TextField(
+            controller: _searchController,
+            decoration: const InputDecoration(
+              hintText: 'Tìm theo tiêu đề / nội dung',
+              prefixIcon: Icon(Icons.search),
+              border: OutlineInputBorder(),
+            ),
+            onChanged: (v) => setState(() => _query = v),
+          ),
+        ),
+        Expanded(child: _buildListView(data)),
+      ],
+    );
+  }
+
+  Widget _buildListView(List<Note> data) {
+    if (data.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Icon(Icons.note_alt, size: 60, color: Colors.grey),
+            SizedBox(height: 12),
+            Text('Chưa có ghi chú nào', style: TextStyle(fontSize: 16, color: Colors.grey)),
+          ],
+        ),
+      );
+    }
+
+    // Grid
+    if (_isGrid) {
+      return GridView.count(
+        crossAxisCount: 2,
+        padding: const EdgeInsets.all(12),
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        childAspectRatio: 3 / 2,
+        children: List.generate(data.length, (index) {
+          final note = data[index];
+          return _NoteCard(
+            note: note,
+            // [THÊM 5.3] Truyền text thời gian xuống Card để hiển thị
+            timeText: _timeLabel(note),
+            onTap: () => _openEdit(note, index),
+          );
+        }),
+      );
+    }
+
+    // List
+    return ListView.separated(
+      itemCount: data.length,
+      separatorBuilder: (_, __) => const Divider(height: 1),
+      itemBuilder: (context, index) {
+        final note = data[index];
+        // subtitle đổi thành 2 dòng: (1) nội dung, (2) thời gian
+        return ListTile(
+          title: Text(note.title),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(note.content, maxLines: 1, overflow: TextOverflow.ellipsis),
+              const SizedBox(height: 4),
+              Text(
+                _timeLabel(note),
+                style: const TextStyle(fontSize: 12, color: Colors.grey),
+              ),
+            ],
+          ),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () => _openEdit(note, index),
+        );
+      },
+    );
+  }
+
+  Future<void> _openEdit(Note note, int index) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => WriteNotePage(note: note, index: index)),
+    );
+
+    if (result is Map) {
+      final action = result['action'];
+      if (action == 'update' && result['note'] is Note && result['index'] is int) {
+        setState(() => _notes[result['index'] as int] = result['note'] as Note);
+      } else if (action == 'delete' && result['index'] is int) {
+        setState(() => _notes.removeAt(result['index'] as int));
+      }
+    }
+  }
+}
+
+//  Card dùng cho Grid + thêm dòng thời gian ở chân thẻ
+class _NoteCard extends StatelessWidget {
+  final Note note;
+  final String timeText;
+  final VoidCallback onTap;
+  const _NoteCard({required this.note, required this.timeText, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                note.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 4),
+              Expanded(
+                child: Text(
+                  note.content,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 14),
+                ),
+              ),
+              const SizedBox(height: 6),
+              // them dong thoi gian
+              Text(
+                timeText,
+                style: const TextStyle(fontSize: 12, color: Colors.grey),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
