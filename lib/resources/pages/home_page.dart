@@ -3,6 +3,9 @@ import 'package:nylo_framework/nylo_framework.dart';
 import 'package:flutter_app/app/controllers/home_controller.dart';
 import 'package:flutter_app/app/models/note.dart';
 import 'package:flutter_app/resources/pages/write_note_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+
 
 class HomePage extends NyStatefulWidget<HomeController> {
   static RouteView path = ("/home", (_) => HomePage());
@@ -35,6 +38,13 @@ class _HomePageState extends NyPage<HomePage> {
   final TextEditingController _searchController = TextEditingController();
   String _query = '';
   bool _isGrid = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadNotes();
+  }
+
 
   @override
   void dispose() {
@@ -79,8 +89,10 @@ class _HomePageState extends NyPage<HomePage> {
             context,
             MaterialPageRoute(builder: (_) => const WriteNotePage()),
           );
+
           if (result is Map && result['action'] == 'create' && result['note'] is Note) {
             setState(() => _notes.insert(0, result['note'] as Note));
+            _saveNotes();
           }
         },
         child: const Icon(Icons.add),
@@ -189,11 +201,38 @@ class _HomePageState extends NyPage<HomePage> {
       final action = result['action'];
       if (action == 'update' && result['note'] is Note && result['index'] is int) {
         setState(() => _notes[result['index'] as int] = result['note'] as Note);
+        _saveNotes();
+
       } else if (action == 'delete' && result['index'] is int) {
         setState(() => _notes.removeAt(result['index'] as int));
+        _saveNotes();
       }
     }
   }
+
+  static const String _kNotesKey = 'notes_json_list';
+
+  Future<void> _saveNotes() async {
+    final prefs = await SharedPreferences.getInstance();
+    final list = _notes.map((n) => n.toMap()).toList();
+    final jsonStr = jsonEncode(list);
+    await prefs.setString(_kNotesKey, jsonStr);
+  }
+
+  Future<void> _loadNotes() async {
+    final prefs = await SharedPreferences.getInstance();
+    final jsonStr = prefs.getString(_kNotesKey);
+    if (jsonStr != null && jsonStr.isNotEmpty) {
+      final List decoded = jsonDecode(jsonStr);
+      setState(() {
+        _notes
+          ..clear()
+          ..addAll(decoded.map((e) =>
+              Note.fromMap(Map<String, dynamic>.from(e))));
+      });
+    }
+  }
+
 }
 
 class _NoteCard extends StatelessWidget {
